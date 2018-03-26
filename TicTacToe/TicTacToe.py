@@ -32,6 +32,10 @@ def next_turn(playerNum, board):
         print("Player One Wins")
         new_game()
         pass
+    elif (tie_check(board)==True):
+        print("Tie")
+        new_game()
+        pass
     elif (playerNum==1):
         next_turn(2, board)
         pass
@@ -60,6 +64,15 @@ def win_check(player, board):
     else:
         return False
     pass
+
+def tie_check(board):
+    tie = False
+    for a in range(len(board)):
+        if (board[a]=="X" or board[a]=="O"):
+            tie = True
+            pass
+        pass
+    return tie
 
 def new_game():
     print("Tic-tac-toe \nEnter number to place your piece in that location\n")
