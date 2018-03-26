@@ -17,7 +17,11 @@ def show_board(board):
 
 def next_turn(playerNum, board):
     playerIn = int(input("Player "+str(playerNum)+"\n"))
-    if (playerNum==1):
+    if (board[playerIn]=="X" or board[playerIn]=="O"):
+        print("Position taken")
+        next_turn(playerNum, board)
+        pass
+    elif (playerNum==1):
         board[playerIn] = "X"
         pass
     elif (playerNum==2):
@@ -66,13 +70,17 @@ def win_check(player, board):
     pass
 
 def tie_check(board):
-    tie = False
+    tie = 0
     for a in range(len(board)):
         if (board[a]=="X" or board[a]=="O"):
-            tie = True
+            tie += 1
             pass
         pass
-    return tie
+    if (tie==9):
+        return True
+    else:
+        return False
+    pass
 
 def new_game():
     print("Tic-tac-toe \nEnter number to place your piece in that location\n")
