@@ -1,3 +1,8 @@
+import random
+
+game_on = False
+playerNum = 0 
+
 def new_board():
     board = []
     for i in range(9):
@@ -15,38 +20,16 @@ def show_board(board):
     print(drawing)
     pass
 
-def next_turn(playerNum, board):
-    playerIn = int(input("Player "+str(playerNum)+"\n"))
-    if (board[playerIn]=="X" or board[playerIn]=="O"):
-        print("Position taken")
-        next_turn(playerNum, board)
-        pass
-    elif (playerNum==1):
+def change_board(board, playerIn):
+    global playerNum
+    if (playerNum==1):
         board[playerIn] = "X"
         pass
     elif (playerNum==2):
         board[playerIn] = "O"
         pass    
     show_board(board)
-    if (win_check("X", board)==True):
-        print("Player One Wins")
-        new_game()
-        pass
-    elif (win_check("O", board)==True):
-        print("Player One Wins")
-        new_game()
-        pass
-    elif (tie_check(board)==True):
-        print("Tie")
-        new_game()
-        pass
-    elif (playerNum==1):
-        next_turn(2, board)
-        pass
-    elif (playerNum==2):
-        next_turn(1, board)
-        pass
-    pass
+    return board 
 
 def win_check(player, board):
     if (board[0]==player and board[1]==player and board[2]==player):
@@ -82,14 +65,114 @@ def tie_check(board):
         return False
     pass
 
-def new_game():
-    print("Tic-tac-toe \nEnter number to place your piece in that location\n")
-    board = new_board()
+def vs_bot(board):
     show_board(board)
-    next_turn(1, board)
+    global playerNum
+    global game_on
+    while game_on == True:
+        if playerNum == 1:
+            #Player's turn
+            while True:
+                playerIn = int(input("Player "+str(playerNum)+"'s Turn\n"))
+                if (board[playerIn]=="X" or board[playerIn]=="O"):
+                    print("Position taken")
+                    continue
+                else:
+                    break
+            pass
+        elif playerNum == 2:
+            #Bot's turn
+            print("Player "+str(playerNum)+"'s Turn\n")
+            while True:
+                playerIn = random.randint(0,8)
+                if (board[playerIn]=="X" or board[playerIn]=="O"):
+                    continue
+                else:
+                    break
+            pass
+        else:
+            print("PlayerNum Error.")
+            game_on = False
+            new_game()
+            pass
+        next_turn(board, playerIn)
     pass
 
-new_game()
+def vs_player(board):    
+    show_board(board)
+    global playerNum
+    global game_on
+    while game_on == True:
+        while True:
+            playerIn = int(input("Player "+str(playerNum)+"'s Turn\n"))
+            if (board[playerIn]=="X" or board[playerIn]=="O"):
+                print("Position taken")
+                continue
+            else:
+                break
+        pass
+        next_turn(board, playerIn)
+    pass
 
+def next_turn(board, playerIn):
+    global game_on
+    board = change_board(board, playerIn)
+    if (win_check("X", board)==True):
+        print("Player One Wins\n")
+        game_on = False
+        new_game()
+        pass
+    elif (win_check("O", board)==True):
+        print("Player Two Wins\n")
+        game_on = False
+        new_game()
+        pass
+    elif (tie_check(board)==True):
+        print("Tie\n")
+        game_on = False
+        new_game()
+        pass
+    global playerNum
+    if playerNum == 1:
+        playerNum = 2
+        pass
+    elif playerNum == 2:
+        playerNum = 1
+        pass
+    else:
+        print("PlayerNum Error.")
+        game_on = False
+        new_game()
+        pass
+    pass
 
+def new_game():
+    global playerNum
+    global game_on
+    playerNum = 1
+    game_on = True
+    board = new_board()
+    while True:
+        choice = input("Enter 1 to play against a bot or 2 for a two-player game:\n")
+        if choice == "1":
+            vs_bot(board)
+            break
+        elif choice == "2":
+            vs_player(board)
+            break
+        else:
+            print("Invalid input.")
+            continue
+        pass
+    pass
 
+def main():    
+    print("Tic-tac-toe \n")
+    print("How to play:")
+    print("Enter a number to place your piece in that location.\n")
+    #print("Press Q anytime to quit.\n")
+    print("Have fun!")
+    new_game()
+    pass
+
+main() 
