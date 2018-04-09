@@ -1,5 +1,3 @@
-#test
- 
 def new_board():
     board = []
     for i in range(9):
